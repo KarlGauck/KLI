@@ -1,0 +1,4 @@
+#!/bin/bash
+clear
+kotlinc src/main/kotlin/*kt -include-runtime -nowarn -d main.jar
+java -jar main.jar
