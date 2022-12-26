@@ -50,7 +50,7 @@ fun <T> List<T>.contentEquals(other: List<T>): Boolean {
 // ################################# Convenient loop functions ##################################
 // ##############################################################################################
 
-operator fun IntRange.plus(other: IntRange) = Range2D(other, this)
+operator fun IntRange.plus(other: IntRange) = Range2D(this, other)
 
 class Range2D(val range1: IntRange, val range2: IntRange) {
 
