@@ -63,8 +63,8 @@ object Cli {
         10 -> " ║ "
         11 -> "   "
         12 -> " ☐ "
-        13 -> " ╞ "
-        14 -> " ╡ "
+        13 -> " ╞═"
+        14 -> "═╡ "
         15 -> " ╥ "
         16 -> " ╨ "
         else -> "error"
@@ -165,6 +165,48 @@ class Text(x: Int, y: Int, width: Int, height: Int, override var zIndex: Int = 0
     }
 
 }
+
+// ##############################################################################################
+// ######################################### Border #############################################
+// ##############################################################################################
+
+class ProgressBar(x: Int, y: Int, width: Int, height: Int, var progress: Double = 0.0, override var zIndex: Int = 0): Object() {
+    override lateinit var shape: Shape
+
+    init {
+        shape = Shape().apply {
+            this.x = x
+            this.y = y
+            this.width = width
+            this.height = height
+        }
+    }
+
+    override fun pixel(pos: Array<Int>): String = when (pos[0]) {
+        0 -> "$ANSI_BLUE[$ANSI_RESET"
+        shape.width-1 -> "$ANSI_BLUE]$ANSI_RESET"
+        else -> {
+            val end = ((shape.width-4)*progress).toInt()
+            if (pos[0] < end+2)
+                "$ANSI_RED-$ANSI_RESET"
+            else if (pos[0] == end+2)
+                "$ANSI_RED>$ANSI_RESET"
+            else if (pos[0] % 2 == 0)
+                "${ANSI_YELLOW}o$ANSI_RESET"
+            else " "
+        }
+    }
+
+    override fun contains(pos: Array<Int>): Boolean {
+        return pos[0] in shape.x until shape.x+shape.width && pos[1] in shape.y until shape.y+shape.height
+    }
+
+}
+
+
+// ##############################################################################################
+// ######################################### Border #############################################
+// ##############################################################################################
 
 val borders = mutableMapOf(
     Pair(bL(1,1,1,1,1,1,1,1), 12),
